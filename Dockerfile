@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM node
 
 WORKDIR /usr/src/app
 
@@ -11,18 +11,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   pngquant \
   qpdf \
   tesseract-ocr \
-  tesseract-ocr-chi-sim \
-  tesseract-ocr-deu \
+  tesseract-ocr-rus \
   tesseract-ocr-eng \
-  tesseract-ocr-fra \
-  tesseract-ocr-por \
-  tesseract-ocr-spa \
-  unpaper
+  unpaper \
+  python3.4 \
+  python3-pip
 
 RUN pip install --upgrade pip
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
-COPY app.py .
+COPY src/* ./
+RUN npm install
 
-CMD [ "python", "app.py" ]
+RUN mkdir tmp
+
+CMD [ "node", "index.js" ]
+
+EXPOSE 4565

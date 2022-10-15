@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<form id="form">
+    <input type="file" name="pdf">
+    <button>Submit</button>
+</form>
+<script>
+    async function onSubmit(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const response = await fetch("/tickets", {
+        method: "post",
+        body: formData
+      });
+      const id = await response.json();
+      alert(JSON.stringify(id));
+    }
+
+    function downloadBlob(blob, name = 'file.pdf') {
+    if (
+      window.navigator && 
+      window.navigator.msSaveOrOpenBlob
+    ) return window.navigator.msSaveOrOpenBlob(blob);
+
+    // For other browsers:
+    // Create a link pointing to the ObjectURL containing the blob.
+    const data = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = data;
+    link.download = name;
+
+    // this is necessary as link.click() does not work on the latest firefox
+    link.dispatchEvent(
+      new MouseEvent('click', { 
+        bubbles: true, 
+        cancelable: true, 
+        view: window 
+      })
+    );
+
+    setTimeout(() => {
+        // For Firefox it is necessary to delay revoking the ObjectURL
+        window.URL.revokeObjectURL(data);
+        link.remove();
+      }, 100);
+    }
+    document.querySelector("#form").addEventListener("submit", onSubmit);
+</script>
+</body>
+</html>
