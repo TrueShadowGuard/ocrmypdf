@@ -46,7 +46,7 @@ ticketsRouter.post("/", upload.single('pdf'), (req, res) => {
     }
 
     tickets[outputFileName].status = Ticket.statuses.SUCCESS;
-    tickets[outputFileName].downloadLink = "/tmp/" + outputFileName;
+    tickets[outputFileName].downloadLink = outputFileName;
   });
 
 

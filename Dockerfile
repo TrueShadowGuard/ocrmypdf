@@ -21,15 +21,11 @@ RUN pip install --upgrade pip
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
-RUN mkdir app
-RUN mkdir app/front
-RUN mkdir app/backend
-
 COPY src/backend ./backend
 COPY src/front ./front
 
-RUN cd ./backend && npm install
-RUN cd ./front && npm install && npm run build
+RUN cd backend && npm install
+RUN cd front && npm install && npm run build
 
 CMD [ "node", "backend/index.js" ]
 
